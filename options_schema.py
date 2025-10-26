@@ -111,7 +111,7 @@ OPTIONS_SCHEMA = {
         "type": Path,
         "default": None,
         "help": "Path the mapping file (.usmap) is at. Should end in .usmap",
-        "section": "Mapping",
+        "section": "Batch Export",
         "depends_on": ["SHOULD_BATCH_EXPORT"]
     },
     "OUTPUT_DATA_DIR": {

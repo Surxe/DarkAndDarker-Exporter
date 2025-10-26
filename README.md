@@ -91,17 +91,14 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
   - Command line: `--force-export`
   - Depends on: `SHOULD_BATCH_EXPORT`
 
-* **OUTPUT_DATA_DIR** - Path to save the exported assets to.
-  - Default: None - required when SHOULD_BATCH_EXPORT is True
-  - Command line: `--output-data-dir`
-  - Depends on: `SHOULD_BATCH_EXPORT`
-
-
-#### Mapping
-
 * **OUTPUT_MAPPER_FILE** - Path the mapping file (.usmap) is at. Should end in .usmap
   - Default: None - required when SHOULD_BATCH_EXPORT is True
   - Command line: `--output-mapper-file`
+  - Depends on: `SHOULD_BATCH_EXPORT`
+
+* **OUTPUT_DATA_DIR** - Path to save the exported assets to.
+  - Default: None - required when SHOULD_BATCH_EXPORT is True
+  - Command line: `--output-data-dir`
   - Depends on: `SHOULD_BATCH_EXPORT`
 
 
