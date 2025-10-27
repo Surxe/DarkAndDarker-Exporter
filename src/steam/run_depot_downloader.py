@@ -1,13 +1,11 @@
 import os
 import shutil
 from loguru import logger
-from optionsconfig import init_options
 from utils import run_process
 from typing import Optional
-from pathlib import Path
 
-APP_ID = '1491000'  # war robots: frontier's app_id
-DEPOT_ID = '1491005'  # the big depot
+APP_ID = '2016590'  # war robots: frontier's app_id
+DEPOT_ID = '2016591'  # the big depot
 
 
 class DepotDownloader:
