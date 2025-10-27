@@ -10,17 +10,6 @@ from optionsconfig import init_options, Options
 from utils import run_process
 from loguru import logger
 
-"""
-Usage:
-    python batchexport.py <mapping_file_path>
-
-Example:
-    python batchexport.py /path/to/mapping/file.usmap
-
-Alternatively, you can import and use the BatchExporter class directly:
-"""
-
-
 class BatchExporter:
     """
     A class to handle batch exporting of game assets using the CUE4P BatchExport tool.
@@ -53,11 +42,14 @@ class BatchExporter:
         # Build the command once during initialization
         self.command = [
             str(self.executable_path),
-            "--preset", "WarRobotsFrontiers",
-            "--pak-files-directory", self.options.steam_game_download_dir,
-            "--export-output-path", self.options.output_data_dir,
-            "--mapping-file-path", self.mapping_file_path,
-            "--is-logging-enabled", "true" if self.options.log_level == "DEBUG" else "false"
+            "--preset", "DarkAndDarker",
+            "--pak-files-directory", str(Path(self.options.steam_game_download_dir + "\DungeonCrawler\Content\Paks")),
+            "--export-output-path", str(self.options.output_data_dir),
+            "--mapping-file-path", str(self.mapping_file_path),
+            "--is-logging-enabled", "true" if self.options.log_level == "DEBUG" else "false",
+            "--needed-exports-file-path", "null", #output everything
+            "--should-wipe-output-directory", "true" if self.options.force_export else "false"
+            "--aes-key-hex", "0x903DBEEB889CFB1C25AFA28A9463F6D4E816B174D68B3902427FE5867E8C688E"
         ]
         
         # Validate paths
