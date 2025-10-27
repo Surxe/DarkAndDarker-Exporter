@@ -128,57 +128,6 @@ def run_steam_download_update(options: Options) -> bool:
         logger.error(f"Traceback: {traceback.format_exc()}")
         return False
 
-
-def run_mapper_creation(options: Options) -> Optional[str]:
-    """
-    Run DLL injection process to create the mapper file.
-    
-    Args:
-        options (Options): Configuration options
-        
-    Returns:
-        str or None: Path to the created mapper file if successful, None otherwise
-    """
-    start_time = time.time()
-    logger.debug(f"Mapper creation timer started at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))}")
-    
-    try:
-        logger.info("=" * 60)
-        logger.info("STEP 3: DLL INJECTION FOR MAPPER FILE")
-        logger.info("=" * 60)
-        
-        from mapper.get_mapper import main as mapper_main
-        
-        logger.info("Running DLL injection to create mapper file...")
-        logger.info(f"Steam game download path: {options.steam_game_download_dir}")
-        logger.info(f"Dumper-7 output directory: {options.dumper7_output_dir}")
-        logger.info(f"Output mapper file: {options.output_mapper_file}")
-        
-        mapper_file_path = mapper_main(options)
-        
-        end_time = time.time()
-        elapsed_time = end_time - start_time
-        logger.debug(f"Mapper creation timer ended at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))}")
-        logger.debug(f"Mapper creation execution time: {elapsed_time:.2f} seconds ({elapsed_time/60:.2f} minutes)")
-        
-        if mapper_file_path and os.path.exists(mapper_file_path):
-            logger.success(f"Mapper file created successfully: {mapper_file_path}")
-            return mapper_file_path
-        else:
-            logger.error("Mapper file creation failed - file does not exist")
-            return None
-        
-    except Exception as e:
-        end_time = time.time()
-        elapsed_time = end_time - start_time
-        logger.debug(f"Mapper creation timer ended (with error) at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))}")
-        logger.debug(f"Mapper creation execution time before error: {elapsed_time:.2f} seconds ({elapsed_time/60:.2f} minutes)")
-        
-        logger.error(f"Mapper creation failed: {e}")
-        logger.error(f"Traceback: {traceback.format_exc()}")
-        return None
-
-
 def run_batch_export(options: Options, mapper_file_path: str) -> bool:
     """
     Run BatchExport to convert game assets to JSON format.
@@ -305,22 +254,12 @@ def main(args: Namespace, log_file: str) -> bool:
         else:
             logger.info("Skipping steam download/update step...")
         
-        # Step 3: Mapper Creation
-        mapper_file_path = None
-        if options.should_get_mapper:
-            mapper_file_path = run_mapper_creation(options)
-            if not mapper_file_path:
-                logger.error("Mapper creation failed. Cannot continue.")
-                return False
-        else:
-            logger.info("Skipping mapper creation step...")
-        
         # Step 4: BatchExport
         if options.should_batch_export:
             # If skipped mapper creation, use the expected output path
             mapper_file_path = options.output_mapper_file
             if not os.path.exists(mapper_file_path):
-                logger.error(f"Mapper file not found at {mapper_file_path}. Cannot skip mapper creation.")
+                logger.error(f"Mapper file not found at {mapper_file_path}. Cannot skip mapper creation for BatchExport.")
                 return False
             if not run_batch_export(options, mapper_file_path):
                 logger.error("BatchExport failed.")
