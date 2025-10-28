@@ -59,8 +59,8 @@ class TestDepotDownloader(unittest.TestCase):
         self.assertEqual(depot.steam_username, self.steam_username)
         self.assertEqual(depot.steam_password, self.steam_password)
         self.assertEqual(depot.force, self.force)
-        self.assertEqual(depot.app_id, '1491000')
-        self.assertEqual(depot.depot_id, '1491005')
+        self.assertEqual(depot.app_id, '2016590')
+        self.assertEqual(depot.depot_id, '2016591')
         self.assertEqual(depot.manifest_path, os.path.join(self.wrf_dir, 'manifest.txt'))
 
     @patch('os.path.exists')
