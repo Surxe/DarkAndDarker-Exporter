@@ -122,7 +122,7 @@ OPTIONS_SCHEMA = {
         "default": None,
         "help": "File path to save the repacked game archive. Should end in .pak",
         "section": "Repacking",
-        "depends_on": ["SHOULD_REPACK"]
+        "depends_on": ["SHOULD_REPACK", "SHOULD_BATCH_EXPORT"]
     },
     "SHOULD_BATCH_EXPORT": {
         "env": "SHOULD_BATCH_EXPORT",

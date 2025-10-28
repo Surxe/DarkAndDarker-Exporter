@@ -42,7 +42,7 @@ class BatchExporter:
         self.command = [
             str(self.executable_path),
             "--preset", "DarkAndDarker",
-            "--pak-files-directory", str(Path(self.options.steam_game_download_dir + "\DungeonCrawler\Content\Paks")),
+            "--pak-files-directory", str(Path(self.options.repack_output_file).parent),
             "--export-output-path", str(self.options.output_data_dir),
             "--mapping-file-path", str(self.mapping_file_path),
             "--is-logging-enabled", "true" if self.options.log_level == "DEBUG" else "false",
@@ -59,13 +59,13 @@ class BatchExporter:
         if not self.executable_path.exists():
             raise FileNotFoundError(
                 f"BatchExport.exe not found at {self.executable_path}. "
-                "Please run install_batch_export.sh first to download it."
+                "Please use should_download_dependencies first to download it."
             )
         
-        if not os.path.exists(self.options.steam_game_download_dir):
+        if not os.path.exists(self.options.repack_output_file):
             raise FileNotFoundError(
-                f"Steam game download path not found: {self.options.steam_game_download_dir}. "
-                "Please ensure STEAM_GAME_DOWNLOAD_DIR is set correctly in your environment."
+                f"Repacked .pak file not found: {self.options.repack_output_file}. "
+                "Please ensure repack_output_file is set correctly in your environment."
             )
         
         # Create output data directory if it doesn't exist
@@ -93,7 +93,7 @@ class BatchExporter:
         logger.info("Starting BatchExport process...")
         logger.info(f"Using mapping file: {self.mapping_file_path}")
         logger.info(f"Executing BatchExport with command: {str(self)}")
-        logger.info(f"PAK files directory: {self.options.steam_game_download_dir}")
+        logger.info(f"PAK files directory: {self.options.repack_output_file}")
         logger.info(f"Export output path: {self.options.output_data_dir}")
         
         try:

@@ -97,9 +97,9 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
   - Depends on: `SHOULD_REPACK`
 
 * **REPACK_OUTPUT_FILE** - File path to save the repacked game archive. Should end in .pak
-  - Default: None - required when SHOULD_REPACK is True
+  - Default: None - required when SHOULD_REPACK or SHOULD_BATCH_EXPORT is True
   - Command line: `--repack-output-file`
-  - Depends on: `SHOULD_REPACK`
+  - Depends on: `SHOULD_REPACK`, `SHOULD_BATCH_EXPORT`
 
 
 #### Batch Export
