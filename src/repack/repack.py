@@ -10,9 +10,9 @@ class Repacker:
     """
     Handles extraction and repacking of Unreal Engine .pak files using UnrealPak.exe.
     """
-    def __init__(self, options: Options, repack_output_file: str) -> None:
+    def __init__(self, options: Options) -> None:
         self.options = options
-        self.repack_output_file = repack_output_file
+        self.repack_output_file = options.repack_output_file
         self.ue_install_dir = options.ue_install_dir
         self.steam_game_download_dir = options.steam_game_download_dir
         self.crypto_json = Path(__file__).parent / "Crypto.json"
