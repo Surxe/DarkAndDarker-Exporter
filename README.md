@@ -75,9 +75,26 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
   - Depends on: `SHOULD_DOWNLOAD_STEAM_GAME`
 
 * **STEAM_GAME_DOWNLOAD_DIR** - Path to the local Steam game installation directory.
-  - Default: None - required when SHOULD_DOWNLOAD_STEAM_GAME is True
+  - Default: None - required when SHOULD_DOWNLOAD_STEAM_GAME or SHOULD_REPACK is True
   - Command line: `--steam-game-download-dir`
-  - Depends on: `SHOULD_DOWNLOAD_STEAM_GAME`
+  - Depends on: `SHOULD_DOWNLOAD_STEAM_GAME`, `SHOULD_REPACK`
+
+
+#### Repacking
+
+- **SHOULD_REPACK** - Whether to repack the game files into a single archive.
+  - Default: `"false"`
+  - Command line: `--should-repack`
+
+* **UE_INSTALL_DIR** - Path to the Unreal Engine 5.3 installation directory.
+  - Default: None - required when SHOULD_REPACK is True
+  - Command line: `--ue-install-dir`
+  - Depends on: `SHOULD_REPACK`
+
+* **REPACK_OUTPUT_FILE** - File path to save the repacked game archive. Should end in .pak
+  - Default: None - required when SHOULD_REPACK is True
+  - Command line: `--repack-output-file`
+  - Depends on: `SHOULD_REPACK`
 
 
 #### Batch Export

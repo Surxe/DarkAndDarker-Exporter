@@ -86,7 +86,34 @@ OPTIONS_SCHEMA = {
         "default": None,
         "help": "Path to the local Steam game installation directory.",
         "section": "Steam Download",
-        "depends_on": ["SHOULD_DOWNLOAD_STEAM_GAME"]
+        "depends_on": ["SHOULD_DOWNLOAD_STEAM_GAME", "SHOULD_REPACK"]
+    },
+    "SHOULD_REPACK": {
+        "env": "SHOULD_REPACK",
+        "arg": "--should-repack",
+        "type": bool,
+        "default": False,
+        "help": "Whether to repack the game files into a single archive.",
+        "section": "Repacking",
+    },
+    "UE_INSTALL_DIR": {
+        "env": "UE_INSTALL_DIR",
+        "arg": "--ue-install-dir",
+        "type": Path,
+        "default": None,
+        #"example": "C:\Program Files\Epic Games\UE_5.3",
+        "help": "Path to the Unreal Engine 5.3 installation directory.",
+        "section": "Repacking",
+        "depends_on": ["SHOULD_REPACK"]
+    },
+    "REPACK_OUTPUT_FILE": {
+        "env": "REPACK_OUTPUT_FILE",
+        "arg": "--repack-output-file",
+        "type": Path,
+        "default": None,
+        "help": "File path to save the repacked game archive. Should end in .pak",
+        "section": "Repacking",
+        "depends_on": ["SHOULD_REPACK"]
     },
     "SHOULD_BATCH_EXPORT": {
         "env": "SHOULD_BATCH_EXPORT",
