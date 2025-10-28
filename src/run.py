@@ -128,6 +128,59 @@ def run_steam_download_update(options: Options) -> bool:
         logger.error(f"Traceback: {traceback.format_exc()}")
         return False
 
+def run_repack(options: Options) -> bool:
+    """
+    Run the repack process to repack game files into a single archive.
+    
+    Args:
+        options (Options): Configuration options
+        
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    start_time = time.time()
+    logger.debug(f"Repack timer started at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))}")
+    
+    try:
+        logger.info("=" * 60)
+        logger.info("STEP 3: REPACK")
+        logger.info("=" * 60)
+        
+        # Import with correct module name (handle hyphen in directory name)
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "repack", 
+            os.path.join(os.path.dirname(__file__), "repack", "repack.py")
+        )
+        repack_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(repack_module)
+        repack_main = repack_module.main
+        
+        logger.info("Running repack process to repack game files...")
+        result = repack_main(options, options.repack_output_file)
+        
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        logger.debug(f"Repack timer ended at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))}")
+        logger.debug(f"Repack execution time: {elapsed_time:.2f} seconds ({elapsed_time/60:.2f} minutes)")
+        
+        if result:
+            logger.success("Repack completed successfully!")
+            return True
+        else:
+            logger.error("Repack failed")
+            return False
+        
+    except Exception as e:
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        logger.debug(f"Repack timer ended (with error) at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))}")
+        logger.debug(f"Repack execution time before error: {elapsed_time:.2f} seconds ({elapsed_time/60:.2f} minutes)")
+        
+        logger.error(f"Repack failed: {e}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        return False
+
 def run_batch_export(options: Options, mapper_file_path: str) -> bool:
     """
     Run BatchExport to convert game assets to JSON format.
@@ -253,6 +306,14 @@ def main(args: Namespace, log_file: str) -> bool:
                 return False
         else:
             logger.info("Skipping steam download/update step...")
+
+        # Step 3: Repack
+        if options.should_repack:
+            if not run_repack(options):
+                logger.error("Repack failed. Cannot continue.")
+                return False
+        else:
+            logger.info("Skipping repack step...")
         
         # Step 4: BatchExport
         if options.should_batch_export:
