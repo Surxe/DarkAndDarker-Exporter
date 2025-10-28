@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from optionsconfig import init_options, Options
+from optionsconfig import Options
 from utils import run_process
 from loguru import logger
 
@@ -17,7 +17,7 @@ class BatchExporter:
     for extracting War Robots Frontiers game data from .pak files to JSON format.
     """
     
-    def __init__(self, options: Optional[Options] = None, mapping_file_path: Optional[str] = None) -> None:
+    def __init__(self, options: Options, mapping_file_path: str) -> None:
         """
         Initialize the BatchExporter.
         
@@ -25,11 +25,6 @@ class BatchExporter:
             options (Options, optional): Options object containing configuration. If None, will create default.
             mapping_file_path (str): Path to the mapping file for UE4 assets (required)
         """
-        if options is None:
-            options = init_options()
-        
-        if mapping_file_path is None:
-            raise ValueError("mapping_file_path is required for BatchExporter")
         
         self.options = options
         self.mapping_file_path = mapping_file_path

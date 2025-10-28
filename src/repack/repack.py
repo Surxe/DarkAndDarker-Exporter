@@ -3,18 +3,14 @@ import sys
 from pathlib import Path
 from typing import Optional
 from loguru import logger
-from optionsconfig import init_options, Options
+from optionsconfig import Options
 from utils import run_process
 
 class Repacker:
     """
     Handles extraction and repacking of Unreal Engine .pak files using UnrealPak.exe.
     """
-    def __init__(self, options: Optional[Options] = None, repack_output_file: Optional[str] = None) -> None:
-        if options is None:
-            options = init_options()
-        if repack_output_file is None:
-            raise ValueError("repack_output_file is required for Repacker")
+    def __init__(self, options: Options, repack_output_file: str) -> None:
         self.options = options
         self.repack_output_file = repack_output_file
         self.ue_install_dir = options.ue_install_dir
