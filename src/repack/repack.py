@@ -85,6 +85,12 @@ def main(options: Optional[Options] = None, repack_output_file: Optional[str] = 
         raise ValueError("Options must be provided")
     if repack_output_file is None:
         raise ValueError("repack_output_file must be provided")
+    
+    # Check if repack output file exists
+    if Path(repack_output_file).exists() and not options.force_repack:
+        logger.info(f"Repack output file {repack_output_file} already exists and FORCE_REPACK is False. Skipping repack.")
+        return True
+
     try:
         repacker = Repacker(options, repack_output_file)
         repacker.run()

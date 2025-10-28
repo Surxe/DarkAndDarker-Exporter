@@ -96,6 +96,15 @@ OPTIONS_SCHEMA = {
         "help": "Whether to repack the game files into a single archive.",
         "section": "Repacking",
     },
+    "FORCE_REPACK": {
+        "env": "FORCE_REPACK",
+        "arg": "--force-repack",
+        "type": bool,
+        "default": False,
+        "help": "Force repacking even if the output file already exists.",
+        "section": "Repacking",
+        "depends_on": ["SHOULD_REPACK"]
+    },
     "UE_INSTALL_DIR": {
         "env": "UE_INSTALL_DIR",
         "arg": "--ue-install-dir",

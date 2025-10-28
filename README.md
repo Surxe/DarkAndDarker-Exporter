@@ -86,6 +86,11 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
   - Default: `"false"`
   - Command line: `--should-repack`
 
+* **FORCE_REPACK** - Force repacking even if the output file already exists.
+  - Default: `"false"`
+  - Command line: `--force-repack`
+  - Depends on: `SHOULD_REPACK`
+
 * **UE_INSTALL_DIR** - Path to the Unreal Engine 5.3 installation directory.
   - Default: None - required when SHOULD_REPACK is True
   - Command line: `--ue-install-dir`
