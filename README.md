@@ -2,15 +2,65 @@
 
 A comprehensive data extraction pipeline for Dark and Darker that downloads game files, creates a mapping file, and exports game assets to JSON format.
 
+
 ## Overview
 
-todo
+DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and convert Dark and Darker game data:
+
+1. **Dependency Manager** - Downloads/updates all required dependencies
+2. **Steam Download/Update** - Downloads/updates game files via DepotDownloader
+3. **DLL Injection for Mapper** - Creates mapper file via game injection TODO
+4. **BatchExport** - Converts game assets to JSON format
+
 
 ## Process Details
 
-todo
+### 1. Dependency Manager
+- Runs `dependency_manager.py` to download latest release of all dependencies if outdated/missing
+- Downloads BatchExport and DepotDownloader tools from their respective GitHub releases
+- Automatically checks versions and updates only when necessary
 
-# Installation
+### 2. Steam Download/Update  
+- Runs `run_depot_downloader` to download/update the latest War Robots Frontiers game version from Steam
+- Download is saved at `STEAM_GAME_DOWNLOAD_DIR`
+- Supports downloading specific manifest versions or latest version
+- Uses Steam credentials for authentication
+- Manifest id (if downloaded latest via `MANIFEST_ID`=`(blank)`) is saved to `STEAM_GAME_DOWNLOAD_DIR`/manifest.txt
+
+### 3. DLL Injection for Mapper File
+- todo
+
+### 4. BatchExport
+- Uses the mapper file and steam download
+- Exports all `.pak`, `.utoc`, and `.locres` source files to `.json`
+- Saves them in `OUTPUT_DATA_DIR`
+- Converts game assets to human-readable JSON format
+
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Surxe/WRFrontiers-Exporter.git
+cd WRFrontiers-Exporter
+```
+
+2. Install Python dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+3. Copy and configure the environment file:
+```bash
+cp .env.example .env
+# Edit .env with your specific paths and Steam credentials
+```
+
+4. Run the exporter:
+```bash
+python src/run.py --help
+```
+
 
 ## Options
 
@@ -133,7 +183,30 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
   * Option
   * Default
 * If all options prefixed with `SHOULD_` are defaulted to `False`, they are instead all defaulted to `True` for ease of use
-* Options are only required if their section's `SHOULD_` option is `True`
+* Options are only required if their section's root `SHOULD_` option is `True`
+
+
+### Common Issues
+
+1. **DLL Injection Fails**
+   - placeholder
+
+2. **Steam Authentication Fails**
+   - Verify your Steam username and password are correct
+   - Check that Steam Guard is not blocking the login
+   - Ensure DepotDownloader has the latest version
+
+3. **Path Not Found Errors**
+   - Verify all directory paths exist and are accessible
+   - Use forward slashes (/) in paths for compatibility
+   - Ensure parent directories exist for output paths
+
+
+## Contributing
+
+* After making changes to `options_schema.py`, rerun `build/docs.py` to rebuild the `.env.example` and `README.md`
+* Follow standards set by `STANDARDS.md`
+
 
 ## Disclaimer
 
