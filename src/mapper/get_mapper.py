@@ -33,13 +33,20 @@ def setup_ue4ss(steam_game_dir: str) -> None:
     os.makedirs(mods_dir, exist_ok=True)
     
     # Copy UE4SS installation files
-    ue4ss_src = src_dir / "ue4ss" / "UE4SS_v3.0.1"
+    ue4ss_src = src_dir / "ue4ss" / "ue4ss"
     if not ue4ss_src.exists():
         raise FileNotFoundError(f"UE4SS installation not found at {ue4ss_src}")
     logger.info(f"Copying UE4SS files from {ue4ss_src} to {bin_dir}")
     shutil.copytree(ue4ss_src, bin_dir, dirs_exist_ok=True)
     
-    # Copy mod files
+    # Copy dwmapi.dll
+    dwmapi_src = src_dir / "ue4ss" / "dwmapi.dll"
+    if not dwmapi_src.exists():
+        raise FileNotFoundError(f"dwmapi.dll not found at {dwmapi_src}")
+    logger.info(f"Copying dwmapi.dll to {bin_dir}")
+    shutil.copy2(dwmapi_src, bin_dir / "dwmapi.dll")
+    
+    # Copy AutoUSMAP mod
     automap_src = src_dir / "ue4ss_mod" / "AutoUSMAP"
     if not automap_src.exists():
         raise FileNotFoundError(f"AutoUSMAP mod not found at {automap_src}")
