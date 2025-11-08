@@ -164,9 +164,6 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
   - Command line: `--force-get-mapper`
   - Depends on: `SHOULD_GET_MAPPER`
 
-
-#### Batch Export
-
 * **OUTPUT_MAPPER_FILE** - File path the mapping file (.usmap) will be saved to. Should end in .usmap
   - Default: None - required when SHOULD_GET_MAPPER or SHOULD_BATCH_EXPORT is True
   - Command line: `--output-mapper-file`
@@ -176,6 +173,9 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
   - Default: None - required when SHOULD_GET_MAPPER is True
   - Command line: `--ue4ss-install-dir`
   - Depends on: `SHOULD_GET_MAPPER`
+
+
+#### Batch Export
 
 - **SHOULD_BATCH_EXPORT** - Whether to run the BatchExport tool to export assets.
   - Default: `"false"`

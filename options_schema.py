@@ -148,7 +148,7 @@ OPTIONS_SCHEMA = {
         "type": Path,
         "default": None,
         "help": "File path the mapping file (.usmap) will be saved to. Should end in .usmap",
-        "section": "Batch Export",
+        "section": "Mapper",
         "depends_on": ["SHOULD_GET_MAPPER", "SHOULD_BATCH_EXPORT"]
     },
     "UE4SS_INSTALL_DIR": {
@@ -157,7 +157,7 @@ OPTIONS_SCHEMA = {
         "type": Path,
         "default": None,
         "help": "Path to the UE4SS installation directory.",
-        "section": "Batch Export",
+        "section": "Mapper",
         "depends_on": ["SHOULD_GET_MAPPER"]
     },
     "SHOULD_BATCH_EXPORT": {
