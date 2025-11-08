@@ -35,6 +35,59 @@ def normalize_path(path: str) -> str:
 #           Process           #
 ###############################
 
+def kill_process_tree(parent_pid) -> None:
+    """Kill a parent process and all its children.
+    
+    Args:
+        parent_pid: The process ID of the parent process to kill
+    """
+    try:
+        import psutil  # Import here to avoid making psutil a requirement for other utils
+        parent = psutil.Process(parent_pid)
+        
+        # First get all children recursively
+        try:
+            children = parent.children(recursive=True)
+            for child in children:
+                try:
+                    child.terminate()  # Try graceful termination first
+                except psutil.NoSuchProcess:
+                    pass
+                    
+            # Give children time to terminate
+            _, still_alive = psutil.wait_procs(children, timeout=3)
+            
+            # Force kill any remaining children
+            for child in still_alive:
+                try:
+                    child.kill()
+                except psutil.NoSuchProcess:
+                    pass
+        except psutil.NoSuchProcess:
+            pass  # Parent died before we could get children
+            
+        # Now terminate parent
+        try:
+            parent.terminate()
+            parent.wait(timeout=3)  # Give it 3 seconds to terminate gracefully
+        except (psutil.NoSuchProcess, psutil.TimeoutExpired):
+            try:
+                parent.kill()  # Force kill if still alive
+            except psutil.NoSuchProcess:
+                pass
+                
+    except (psutil.NoSuchProcess, ImportError) as e:
+        logger.warning(f"Error killing process tree: {e}")
+
+def ensure_parent_dir(file_path: str) -> None:
+    """Ensure the parent directory of a file exists.
+    
+    Args:
+        file_path: The path to the file whose parent directory should exist
+    """
+    parent_dir = os.path.dirname(file_path)
+    os.makedirs(parent_dir, exist_ok=True)
+
 def run_process(options: Union[List[str], str], name: str = '', timeout: int = 60*60, background: bool = False) -> Optional[subprocess.Popen]: #times out after 1hr
     """Runs a subprocess with the given options and logs its output line by line
 

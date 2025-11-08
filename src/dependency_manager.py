@@ -253,7 +253,7 @@ class DependencyManager:
             output_path.parent.mkdir(parents=True, exist_ok=True)
             
             # Download the file
-            req = Request(url, headers={'User-Agent': 'WRFrontiers-Exporter'})
+            req = Request(url, headers={'User-Agent': 'DarkAndDarker-Exporter'})
             
             with urlopen(req) as response:
                 with open(output_path, 'wb') as f:
@@ -275,7 +275,7 @@ class DependencyManager:
             logger.info(f"Downloading file...")
             
             # Create request with user agent to avoid GitHub API restrictions
-            req = Request(url, headers={'User-Agent': 'WRFrontiers-Exporter'})
+            req = Request(url, headers={'User-Agent': 'DarkAndDarker-Exporter'})
             
             with urlopen(req) as response:
                 file_size = int(response.headers.get('Content-Length', 0))
@@ -305,7 +305,7 @@ class DependencyManager:
     def _get_json_from_url(self, url: str) -> dict:
         """Get JSON data from URL."""
         try:
-            req = Request(url, headers={'User-Agent': 'WRFrontiers-Exporter'})
+            req = Request(url, headers={'User-Agent': 'DarkAndDarker-Exporter'})
             with urlopen(req) as response:
                 return json.loads(response.read().decode())
         except (URLError, HTTPError, json.JSONDecodeError) as e:
@@ -474,7 +474,7 @@ def main(force_download: bool = False) -> bool:
     Args:
         force_download (bool): Force download even if same version exists
     """
-    logger.info("Installing WRFrontiers-Exporter dependencies...")
+    logger.info("Installing DarkAndDarker-Exporter dependencies...")
     
     try:
         # Install BatchExport

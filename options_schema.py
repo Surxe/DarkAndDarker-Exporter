@@ -85,6 +85,7 @@ OPTIONS_SCHEMA = {
         "type": Path,
         "default": None,
         "help": "Path to the local Steam game installation directory.",
+        "help_extended": "Game should not be played from this directory if you have ran get_mapper. It will put dll files that will be flagged if not played local-only.",
         "section": "Steam Download",
         "depends_on": ["SHOULD_DOWNLOAD_STEAM_GAME", "SHOULD_REPACK"]
     },
@@ -120,9 +121,35 @@ OPTIONS_SCHEMA = {
         "arg": "--repack-output-file",
         "type": Path,
         "default": None,
-        "help": "File path to save the repacked game archive. Should end in .pak",
+        "help": "File path to save the repacked game archive to. Should end in .pak",
         "section": "Repacking",
         "depends_on": ["SHOULD_REPACK", "SHOULD_BATCH_EXPORT"]
+    },
+    "SHOULD_GET_MAPPER": {
+        "env": "SHOULD_GET_MAPPER",
+        "arg": "--should-get-mapper",
+        "type": bool,
+        "default": False,
+        "help": "Whether to run the mapper extraction process.",
+        "section": "Mapper",
+    },
+    "FORCE_GET_MAPPER": {
+        "env": "FORCE_GET_MAPPER",
+        "arg": "--force-get-mapper",
+        "type": bool,
+        "default": False,
+        "help": "Re-run the mapper extraction even if mapper file exists.",
+        "section": "Mapper",
+        "depends_on": ["SHOULD_GET_MAPPER"]
+    },
+    "OUTPUT_MAPPER_FILE": {
+        "env": "OUTPUT_MAPPER_FILE",
+        "arg": "--output-mapper-file",
+        "type": Path,
+        "default": None,
+        "help": "File path the mapping file (.usmap) will be saved to. Should end in .usmap",
+        "section": "Mapper",
+        "depends_on": ["SHOULD_GET_MAPPER", "SHOULD_BATCH_EXPORT"]
     },
     "SHOULD_BATCH_EXPORT": {
         "env": "SHOULD_BATCH_EXPORT",
@@ -138,15 +165,6 @@ OPTIONS_SCHEMA = {
         "type": bool,
         "default": False,
         "help": "Re-run the BatchExport even if output directory is not empty.",
-        "section": "Batch Export",
-        "depends_on": ["SHOULD_BATCH_EXPORT"]
-    },
-    "OUTPUT_MAPPER_FILE": {
-        "env": "OUTPUT_MAPPER_FILE",
-        "arg": "--output-mapper-file",
-        "type": Path,
-        "default": None,
-        "help": "Path the mapping file (.usmap) is at. Should end in .usmap",
         "section": "Batch Export",
         "depends_on": ["SHOULD_BATCH_EXPORT"]
     },

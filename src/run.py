@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-WRFrontiers-Exporter Main Runner
+DarkAndDarker-Exporter Main Runner
 
-This script orchestrates the complete WRFrontiers data extraction process:
+This script orchestrates the complete DarkAndDarker data extraction process:
 1. Dependency Manager - Downloads/updates all required dependencies
 2. Steam Download/Update - Downloads/updates game files via DepotDownloader
 3. DLL Injection for Mapper - Creates mapper file via game injection
@@ -181,6 +181,59 @@ def run_repack(options: Options) -> bool:
         logger.error(f"Traceback: {traceback.format_exc()}")
         return False
 
+def run_get_mapper(options: Options) -> bool:
+    """
+    Run the mapper extraction process.
+    
+    Args:
+        options (Options): Configuration options
+        
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    start_time = time.time()
+    logger.debug(f"Get mapper timer started at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))}")
+    
+    try:
+        logger.info("=" * 60)
+        logger.info("STEP 4: GET MAPPER")
+        logger.info("=" * 60)
+        
+        # Import with correct module name (handle hyphen in directory name)
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "get_mapper", 
+            os.path.join(os.path.dirname(__file__), "mapper", "get_mapper.py")
+        )
+        get_mapper_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(get_mapper_module)
+        get_mapper_main = get_mapper_module.main
+        
+        logger.info("Running mapper extraction process...")
+        result = get_mapper_main(options)
+        
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        logger.debug(f"Get mapper timer ended at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))}")
+        logger.debug(f"Get mapper execution time: {elapsed_time:.2f} seconds ({elapsed_time/60:.2f} minutes)")
+        
+        if result:
+            logger.success("Get mapper completed successfully!")
+            return True
+        else:
+            logger.error("Get mapper failed")
+            return False
+        
+    except Exception as e:
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        logger.debug(f"Get mapper timer ended (with error) at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))}")
+        logger.debug(f"Get mapper execution time before error: {elapsed_time:.2f} seconds ({elapsed_time/60:.2f} minutes)")
+        
+        logger.error(f"Get mapper failed: {e}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        return False
+
 def run_batch_export(options: Options, mapper_file_path: str) -> bool:
     """
     Run BatchExport to convert game assets to JSON format.
@@ -266,7 +319,7 @@ def validate_environment(options: Options) -> bool:
 
 def main(args: Namespace, log_file: str) -> bool:
     """
-    Main function to run the complete WRFrontiers-Exporter process.
+    Main function to run the complete DarkAndDarker-Exporter process.
         
     Returns:
         bool: True if all steps completed successfully, False otherwise
@@ -275,10 +328,10 @@ def main(args: Namespace, log_file: str) -> bool:
 
     # Initialize basic loguru logger early for startup messages
     from loguru import logger as temp_logger
-    temp_logger.info(f"WRFrontiers-Exporter overall timer started at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(overall_start_time))}")
+    temp_logger.info(f"DarkAndDarker-Exporter overall timer started at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(overall_start_time))}")
     
     try:
-        temp_logger.info("Starting WRFrontiers-Exporter Complete Process")
+        temp_logger.info("Starting DarkAndDarker-Exporter Complete Process")
         temp_logger.info("=" * 80)
         
         # Initialize options with provided arguments
@@ -314,8 +367,16 @@ def main(args: Namespace, log_file: str) -> bool:
                 return False
         else:
             logger.info("Skipping repack step...")
-        
-        # Step 4: BatchExport
+
+        # Step 4: Get Mapper
+        if options.should_get_mapper:
+            if not run_get_mapper(options):
+                logger.error("Get mapper failed. Cannot continue.")
+                return False
+        else:
+            logger.info("Skipping mapper extraction step...")
+
+        # Step 5: BatchExport
         if options.should_batch_export:
             # If skipped mapper creation, use the expected output path
             mapper_file_path = options.output_mapper_file
@@ -331,11 +392,11 @@ def main(args: Namespace, log_file: str) -> bool:
         # Success!
         overall_end_time = time.time()
         overall_elapsed_time = overall_end_time - overall_start_time
-        logger.debug(f"WRFrontiers-Exporter overall timer ended at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(overall_end_time))}")
-        logger.debug(f"Total WRFrontiers-Exporter execution time: {overall_elapsed_time:.2f} seconds ({overall_elapsed_time/60:.2f} minutes)")
+        logger.debug(f"DarkAndDarker-Exporter overall timer ended at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(overall_end_time))}")
+        logger.debug(f"Total DarkAndDarker-Exporter execution time: {overall_elapsed_time:.2f} seconds ({overall_elapsed_time/60:.2f} minutes)")
         
         logger.info("=" * 80)
-        logger.success("WRFrontiers-Exporter Complete Process Finished Successfully!")
+        logger.success("DarkAndDarker-Exporter Complete Process Finished Successfully!")
         logger.info("=" * 80)
         
         return True
@@ -346,8 +407,8 @@ def main(args: Namespace, log_file: str) -> bool:
     except Exception as e:
         overall_end_time = time.time()
         overall_elapsed_time = overall_end_time - overall_start_time
-        logger.debug(f"WRFrontiers-Exporter overall timer ended (with error) at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(overall_end_time))}")
-        logger.debug(f"Total WRFrontiers-Exporter execution time before error: {overall_elapsed_time:.2f} seconds ({overall_elapsed_time/60:.2f} minutes)")
+        logger.debug(f"DarkAndDarker-Exporter overall timer ended (with error) at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(overall_end_time))}")
+        logger.debug(f"Total DarkAndDarker-Exporter execution time before error: {overall_elapsed_time:.2f} seconds ({overall_elapsed_time/60:.2f} minutes)")
         
         logger.error(f"Unexpected error in main process: {e}")
         logger.error(f"Traceback: {traceback.format_exc()}")
@@ -378,7 +439,7 @@ if __name__ == "__main__":
     import argparse
     
     parser = argparse.ArgumentParser(
-        description="WRFrontiers-Exporter - Complete game data extraction pipeline",
+        description="DarkAndDarker-Exporter - Complete game data extraction pipeline",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 For detailed documentation including all command line arguments, configuration options,
