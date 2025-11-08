@@ -9,8 +9,9 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 
 1. **Dependency Manager** - Downloads/updates all required dependencies
 2. **Steam Download/Update** - Downloads/updates game files via DepotDownloader
-3. **DLL Injection for Mapper** - Creates mapper file via game injection TODO
-4. **BatchExport** - Converts game assets to JSON format
+3. **Repack** - Repacks to avoid duplicate paks with differing data
+4. **DLL Injection for Mapper** - Creates mapper file via UE4SS
+5. **BatchExport** - Extracts game assets as JSON or PNG
 
 
 ## Process Details
@@ -27,14 +28,30 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 - Uses Steam credentials for authentication
 - Manifest id (if downloaded latest via `MANIFEST_ID`=`(blank)`) is saved to `STEAM_GAME_DOWNLOAD_DIR`/manifest.txt
 
-### 3. DLL Injection for Mapper File
-- todo
+### 3. Repack
+- Uses UnrealPak.exe from local Unreal Engine 5.3 installation
+- Extracts all .pak files from game directory using Crypto.json keys
+- Extracts to a temporary "PakExtract" directory with -extracttomountpoint flag
+- Repacks all content into a single .pak file with Oodle compression
+- Output is saved to `REPACK_OUTPUT_FILE`
+- Cleans up the temporary extraction directory after repacking
 
-### 4. BatchExport
+### 4. DLL Injection for Mapper File
+- Copies UE4SS files to game's DungeonCrawler/Binaries/Win64 directory
+- Sets up UE4SS AutoUSMAP mod in the Mods directory
+- Launches game in local mode with required parameters
+- Waits for UE4SS to hook into the process and generate mapping file
+- Monitors file generation with 120-second timeout
+- Checks file write access every 3 seconds with 30-second timeout
+- Copies generated .usmap file to `OUTPUT_MAPPER_FILE`
+- Cleans up temporary files after extraction
+
+### 5. BatchExport
 - Uses the mapper file and steam download
-- Exports all `.pak`, `.utoc`, and `.locres` source files to `.json`
+- Exports all `.pak`, `.utoc`, and `.locres` source files to `.json` and/or `.png`
 - Saves them in `OUTPUT_DATA_DIR`
 - Converts game assets to human-readable JSON format
+- Extracts texture assets to PNG format
 
 
 ## Installation
