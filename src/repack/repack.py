@@ -87,7 +87,7 @@ def main(options: Optional[Options] = None, repack_output_file: Optional[str] = 
         return True
 
     try:
-        repacker = Repacker(options, repack_output_file)
+        repacker = Repacker(options)
         repacker.run()
         logger.success("Repack process completed successfully!")
         return True

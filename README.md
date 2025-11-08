@@ -41,8 +41,8 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/Surxe/WRFrontiers-Exporter.git
-cd WRFrontiers-Exporter
+git clone https://github.com/Surxe/DarkAndDarker-Exporter.git
+cd DarkAndDarker-Exporter
 ```
 
 2. Install Python dependencies:
