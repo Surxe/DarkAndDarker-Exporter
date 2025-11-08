@@ -151,15 +151,6 @@ OPTIONS_SCHEMA = {
         "section": "Mapper",
         "depends_on": ["SHOULD_GET_MAPPER", "SHOULD_BATCH_EXPORT"]
     },
-    "UE4SS_INSTALL_DIR": {
-        "env": "UE4SS_INSTALL_DIR",
-        "arg": "--ue4ss-install-dir",
-        "type": Path,
-        "default": None,
-        "help": "Path to the UE4SS installation directory.",
-        "section": "Mapper",
-        "depends_on": ["SHOULD_GET_MAPPER"]
-    },
     "SHOULD_BATCH_EXPORT": {
         "env": "SHOULD_BATCH_EXPORT",
         "arg": "--should-batch-export",

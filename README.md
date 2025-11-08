@@ -169,11 +169,6 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
   - Command line: `--output-mapper-file`
   - Depends on: `SHOULD_GET_MAPPER`, `SHOULD_BATCH_EXPORT`
 
-* **UE4SS_INSTALL_DIR** - Path to the UE4SS installation directory.
-  - Default: None - required when SHOULD_GET_MAPPER is True
-  - Command line: `--ue4ss-install-dir`
-  - Depends on: `SHOULD_GET_MAPPER`
-
 
 #### Batch Export
 
