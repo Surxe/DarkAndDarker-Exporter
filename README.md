@@ -128,6 +128,7 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
   - Default: None - required when SHOULD_DOWNLOAD_STEAM_GAME or SHOULD_REPACK is True
   - Command line: `--steam-game-download-dir`
   - Depends on: `SHOULD_DOWNLOAD_STEAM_GAME`, `SHOULD_REPACK`
+  - Game should not be played from this directory if you have ran get_mapper. It will put dll files that will be flagged if not played local-only.
 
 
 #### Repacking
@@ -146,13 +147,30 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
   - Command line: `--ue-install-dir`
   - Depends on: `SHOULD_REPACK`
 
-* **REPACK_OUTPUT_FILE** - File path to save the repacked game archive. Should end in .pak
+* **REPACK_OUTPUT_FILE** - File path to save the repacked game archive to. Should end in .pak
   - Default: None - required when SHOULD_REPACK or SHOULD_BATCH_EXPORT is True
   - Command line: `--repack-output-file`
   - Depends on: `SHOULD_REPACK`, `SHOULD_BATCH_EXPORT`
 
 
+#### Mapper
+
+- **SHOULD_GET_MAPPER** - Whether to run the mapper extraction process.
+  - Default: `"false"`
+  - Command line: `--should-get-mapper`
+
+* **FORCE_GET_MAPPER** - Re-run the mapper extraction even if mapper file exists.
+  - Default: `"false"`
+  - Command line: `--force-get-mapper`
+  - Depends on: `SHOULD_GET_MAPPER`
+
+
 #### Batch Export
+
+* **OUTPUT_MAPPER_FILE** - File path the mapping file (.usmap) will be saved to. Should end in .usmap
+  - Default: None - required when SHOULD_GET_MAPPER or SHOULD_BATCH_EXPORT is True
+  - Command line: `--output-mapper-file`
+  - Depends on: `SHOULD_GET_MAPPER`, `SHOULD_BATCH_EXPORT`
 
 - **SHOULD_BATCH_EXPORT** - Whether to run the BatchExport tool to export assets.
   - Default: `"false"`
@@ -161,11 +179,6 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
 * **FORCE_EXPORT** - Re-run the BatchExport even if output directory is not empty.
   - Default: `"false"`
   - Command line: `--force-export`
-  - Depends on: `SHOULD_BATCH_EXPORT`
-
-* **OUTPUT_MAPPER_FILE** - Path the mapping file (.usmap) is at. Should end in .usmap
-  - Default: None - required when SHOULD_BATCH_EXPORT is True
-  - Command line: `--output-mapper-file`
   - Depends on: `SHOULD_BATCH_EXPORT`
 
 * **OUTPUT_DATA_DIR** - Path to save the exported assets to.
