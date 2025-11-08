@@ -72,8 +72,9 @@ def setup_ue4ss(steam_game_dir: str) -> None:
     mods_txt_src = src_dir / "ue4ss_mod" / "mods.txt"
     if not mods_txt_src.exists():
         raise FileNotFoundError(f"mods.txt not found at {mods_txt_src}")
-    logger.info("Copying mods.txt")
-    shutil.copy2(mods_txt_src, mods_dir / "mods.txt")
+    mods_dest = mods_dir / "mods.txt"
+    logger.info(f"Copying mods.txt to {mods_dest}")
+    shutil.copy2(mods_txt_src, mods_dest)
 
 def main(options: Optional[Options] = None) -> bool:
     """
@@ -114,7 +115,7 @@ def main(options: Optional[Options] = None) -> bool:
         tavern_exe = Path(game_dir) / "Tavern.exe"
         if not tavern_exe.exists():
             raise FileNotFoundError(f"Tavern.exe not found at {tavern_exe}")
-        return True
+        
         logger.info("Starting game process...")
         game_process = run_process(
             options=[
@@ -127,15 +128,21 @@ def main(options: Optional[Options] = None) -> bool:
             name="DarkAndDarker",
             background=True
         )
+        logger.info(f"Waiting for game to launch, UE4SS to hook, and mappings file to be generated at {mappings_file}...")
         
         # Wait for mappings file with timeout
         timeout = 120  # 2 minutes
         start_time = time.time()
         while not mappings_file.exists():
-            if time.time() - start_time > timeout:
+            time_waited = time.time() - start_time
+            if time_waited > timeout:
                 kill_process_tree(game_process.pid)
                 raise TimeoutError(f"Timed out waiting for mappings file after {timeout} seconds")
             time.sleep(5)
+            logger.info(f"Waiting for mappings file to be generated. Time waited: {time_waited:.2f} seconds / {timeout} seconds")
+
+        logger.info("Mappings file located. Waiting 5 more seconds to ensure file is fully written...")
+        time.sleep(5)
         
         logger.info("Mappings file generated successfully")
         
@@ -146,6 +153,10 @@ def main(options: Optional[Options] = None) -> bool:
         # Copy the mappings file to output location
         logger.info(f"Copying mappings file to {options.output_mapper_file}")
         shutil.copy2(mappings_file, options.output_mapper_file)
+
+        # Remove the mappings file from the binary directory
+        logger.info(f"Removing temporary mappings file at {mappings_file}")
+        os.remove(mappings_file)
         
         logger.success("Mapper extraction completed successfully!")
         return True
