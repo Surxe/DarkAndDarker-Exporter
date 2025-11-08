@@ -44,15 +44,38 @@ def kill_process_tree(parent_pid) -> None:
     try:
         import psutil  # Import here to avoid making psutil a requirement for other utils
         parent = psutil.Process(parent_pid)
-        children = parent.children(recursive=True)
         
-        for child in children:
+        # First get all children recursively
+        try:
+            children = parent.children(recursive=True)
+            for child in children:
+                try:
+                    child.terminate()  # Try graceful termination first
+                except psutil.NoSuchProcess:
+                    pass
+                    
+            # Give children time to terminate
+            _, still_alive = psutil.wait_procs(children, timeout=3)
+            
+            # Force kill any remaining children
+            for child in still_alive:
+                try:
+                    child.kill()
+                except psutil.NoSuchProcess:
+                    pass
+        except psutil.NoSuchProcess:
+            pass  # Parent died before we could get children
+            
+        # Now terminate parent
+        try:
+            parent.terminate()
+            parent.wait(timeout=3)  # Give it 3 seconds to terminate gracefully
+        except (psutil.NoSuchProcess, psutil.TimeoutExpired):
             try:
-                child.kill()
+                parent.kill()  # Force kill if still alive
             except psutil.NoSuchProcess:
                 pass
-            
-        parent.kill()
+                
     except (psutil.NoSuchProcess, ImportError) as e:
         logger.warning(f"Error killing process tree: {e}")
 
