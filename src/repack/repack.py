@@ -1,9 +1,14 @@
 import os
 from pathlib import Path
+import shlex
 from typing import Optional
 from loguru import logger
 from optionsconfig import Options
 from utils import run_process
+
+def format_command(cmd):
+    """Format a command list for logging, properly handling spaces and quotes."""
+    return ' '.join(shlex.quote(str(c)) for c in cmd)
 
 class Repacker:
     """
@@ -34,13 +39,14 @@ class Repacker:
         for pak_file in Path(self.paks_dir).rglob("*.pak"):
             cmd = [
                 str(self.unrealpak_exe),
-                f"-cryptokeys=\"{self.crypto_json}\"",
-                f"\"{pak_file}\"",
-                f"-Extract", f"\"{self.pak_extract_dir}\"",
+                f"-cryptokeys={self.crypto_json}",
+                str(pak_file),
+                "-Extract",
+                str(self.pak_extract_dir),
                 "-extracttomountpoint"
             ]
             logger.info(f"Extracting {pak_file}")
-            logger.debug(f"Command: {' '.join(f'\"{c}\"' if ' ' in c else c for c in cmd)}")
+            logger.debug(f"Command: {format_command(cmd)}")
             run_process(options=cmd, name="UnrealPak Extract", timeout=1800)
         logger.success("Extraction of all .pak files completed.")
 
@@ -48,13 +54,13 @@ class Repacker:
         logger.info(f"Repacking {self.repack_output_file} from {self.pak_extract_dir}")
         cmd = [
             str(self.unrealpak_exe),
-            f"-cryptokeys=\"{self.crypto_json}\"",
-            f"\"{self.repack_output_file}\"",
-            f"-Create=\"{self.pak_extract_dir}\"",
+            f"-cryptokeys={self.crypto_json}",
+            str(self.repack_output_file),
+            f"-Create={self.pak_extract_dir}",
             "-compress",
             "-compressionformat=Oodle"
         ]
-        logger.debug(f"Command: {' '.join(f'\"{c}\"' if ' ' in c else c for c in cmd)}")
+        logger.debug(f"Command: {' '.join(shlex.quote(str(c)) for c in cmd)}")
         run_process(options=cmd, name="UnrealPak Repack", timeout=1800)
         logger.success("Repacking completed.")
 
