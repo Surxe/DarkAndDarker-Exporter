@@ -1,6 +1,6 @@
 # DarkAndDarker-Exporter
 
-A comprehensive data extraction pipeline for Dark and Darker that downloads game files, creates a mapping file, and exports game assets to JSON format.
+A comprehensive data extraction pipeline for Dark and Darker that downloads game files, creates a mapping file, and exports game assets & textures to JSON/PNG.
 
 
 ## Overview
@@ -10,7 +10,7 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 1. **Dependency Manager** - Downloads/updates all required dependencies
 2. **Steam Download/Update** - Downloads/updates game files via DepotDownloader
 3. **Repack** - Repacks to avoid duplicate paks with differing data
-4. **DLL Injection for Mapper** - Creates mapper file via UE4SS
+4. **Get Mapper** - Creates mapper file via UE4SS
 5. **BatchExport** - Extracts game assets as JSON or PNG
 
 
@@ -36,7 +36,7 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 - Output is saved to `REPACK_OUTPUT_FILE`
 - Cleans up the temporary extraction directory after repacking
 
-### 4. DLL Injection for Mapper File
+### 4. Get Mapper File
 - Copies UE4SS files to game's DungeonCrawler/Binaries/Win64 directory
 - Sets up UE4SS AutoUSMAP mod in the Mods directory
 - Launches game in local mode with required parameters
@@ -53,6 +53,23 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 - Converts game assets to human-readable JSON format
 - Extracts texture assets to PNG format
 
+## Prerequisites
+DepotDownloader, BatchExport, and UE4SS are all downloaded via `dependendency_manager`.
+
+[Unreal Engine 5.3](https://www.unrealengine.com/en-US/download) however, needs to be installed before hand. 
+
+Specifically UE5.3 should be installed, not the latest version. This is the version DaD runs on. 
+
+Include the following in your installation which should total roughly 40gb at the time of writing:
+* Core Components
+* Starter Components
+* Templates and Feature Packs
+* Engine Source
+* NOT Editor symbols for debugging
+* NOT Android
+* NOT IOS
+* NOT Linux
+* NOT TVOS
 
 ## Installation
 
@@ -62,18 +79,18 @@ git clone https://github.com/Surxe/DarkAndDarker-Exporter.git
 cd DarkAndDarker-Exporter
 ```
 
-2. Install Python dependencies:
+1. Install Python dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Copy and configure the environment file:
+1. Copy and configure the environment file:
 ```bash
 cp .env.example .env
 # Edit .env with your specific paths and Steam credentials
 ```
 
-4. Run the exporter:
+1. Run the exporter:
 ```bash
 python src/run.py --help
 ```
@@ -218,15 +235,12 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
 
 ### Common Issues
 
-1. **DLL Injection Fails**
-   - placeholder
-
-2. **Steam Authentication Fails**
+1. **Steam Authentication Fails**
    - Verify your Steam username and password are correct
    - Check that Steam Guard is not blocking the login
    - Ensure DepotDownloader has the latest version
 
-3. **Path Not Found Errors**
+2. **Path Not Found Errors**
    - Verify all directory paths exist and are accessible
    - Use forward slashes (/) in paths for compatibility
    - Ensure parent directories exist for output paths
@@ -235,7 +249,14 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
 ## Contributing
 
 * After making changes to `options_schema.py`, rerun `build/docs.py` to rebuild the `.env.example` and `README.md`
-* Follow standards set by `STANDARDS.md`
+* *Try* to follow standards set by `STANDARDS.md`
+
+### Future Ideas
+* Linux or wine support (DaD struggles to launch headless with wine)
+* Unreal Engine 5.3 installation added to `dependency_manager`
+  * Is an Epic Games Launcher install also required?
+  * Is an EGL account required?
+  * Does rerunning the install to the same dir perform a repair that doesn't take as long as a clean install?
 
 
 ## Disclaimer
