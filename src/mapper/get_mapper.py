@@ -33,13 +33,20 @@ def setup_ue4ss(steam_game_dir: str) -> None:
     os.makedirs(mods_dir, exist_ok=True)
     
     # Copy UE4SS installation files
-    ue4ss_src = src_dir / "ue4ss" / "UE4SS_v3.0.1"
+    ue4ss_src = src_dir / "ue4ss" / "ue4ss"
     if not ue4ss_src.exists():
         raise FileNotFoundError(f"UE4SS installation not found at {ue4ss_src}")
     logger.info(f"Copying UE4SS files from {ue4ss_src} to {bin_dir}")
     shutil.copytree(ue4ss_src, bin_dir, dirs_exist_ok=True)
     
-    # Copy mod files
+    # Copy dwmapi.dll
+    dwmapi_src = src_dir / "ue4ss" / "dwmapi.dll"
+    if not dwmapi_src.exists():
+        raise FileNotFoundError(f"dwmapi.dll not found at {dwmapi_src}")
+    logger.info(f"Copying dwmapi.dll to {bin_dir}")
+    shutil.copy2(dwmapi_src, bin_dir / "dwmapi.dll")
+    
+    # Copy AutoUSMAP mod
     automap_src = src_dir / "ue4ss_mod" / "AutoUSMAP"
     if not automap_src.exists():
         raise FileNotFoundError(f"AutoUSMAP mod not found at {automap_src}")
@@ -119,10 +126,18 @@ def main(options: Optional[Options] = None) -> bool:
             time.sleep(5)
             logger.info(f"Waiting for mappings file to be generated. Time waited: {time_waited:.2f} seconds / {timeout} seconds")
 
-        logger.info("Mappings file located. Waiting 5 more seconds to ensure file is fully written...")
-        time.sleep(5)
+        logger.info("Mappings file located. Waiting for file to be released...")
+        write_timeout = 30  # 30 seconds timeout for write access
+        write_start_time = time.time()
+        while not os.access(mappings_file, os.W_OK):
+            time_waited = time.time() - write_start_time
+            if time_waited > write_timeout:
+                kill_process_tree(game_process.pid)
+                raise TimeoutError(f"Timed out waiting for mappings file to be released after {write_timeout} seconds")
+            time.sleep(3)
+            logger.info(f"File is still locked. Time waited: {time_waited:.2f} seconds / {write_timeout} seconds")
         
-        logger.info("Mappings file generated successfully")
+        logger.info("Mappings file generated successfully and ready for processing")
         
         # Kill the game process
         logger.info("Shutting down game process...")

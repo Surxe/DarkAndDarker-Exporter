@@ -467,6 +467,65 @@ def install_depot_downloader(output_path: Optional[Union[str, Path]] = None, for
         dm.cleanup_temp_files()
 
 
+def install_ue4ss(output_path: Optional[Union[str, Path]] = None, force: bool = False) -> bool:
+    """
+    Install UE4SS dependency from the latest pre-release.
+    
+    Args:
+        output_path (str, optional): Path to install to. Defaults to src/mapper/ue4ss/
+        force (bool): Force download even if same version exists
+    """
+    if output_path is None:
+        script_dir = Path(__file__).parent
+        output_path = script_dir / "mapper" / "ue4ss"
+    
+    dm = DependencyManager()
+    try:
+        # Get latest release info (including pre-releases)
+        api_url = "https://api.github.com/repos/UE4SS-RE/RE-UE4SS/releases"
+        releases = dm._get_json_from_url(api_url)
+        if not releases:
+            raise Exception("No releases found")
+        
+        # First release in the list is the latest (includes pre-releases)
+        latest_release = releases[0]
+        version = latest_release.get('tag_name', 'unknown')
+        
+        # Skip if we already have this version and force is False
+        if not force:
+            current_version = dm._get_installed_version(output_path)
+            if current_version == version:
+                logger.info(f"UE4SS version {version} already installed. Skipping download.")
+                return True
+            elif current_version:
+                logger.info(f"Updating UE4SS from version {current_version} to {version}")
+        
+        # Find the UE4SS zip asset
+        matching_asset = None
+        for asset in latest_release.get('assets', []):
+            if asset['name'].startswith('UE4SS_') and asset['name'].endswith('.zip'):
+                matching_asset = asset
+                break
+        
+        if not matching_asset:
+            raise Exception("No matching UE4SS zip asset found in release")
+        
+        # Download and extract
+        download_url = matching_asset['browser_download_url']
+        logger.info(f"Downloading UE4SS version {version} from: {download_url}")
+        
+        dm.download_and_extract(
+            download_url=download_url,
+            output_path=output_path,
+            version=version
+        )
+        
+        return True
+        
+    finally:
+        dm.cleanup_temp_files()
+
+
 def main(force_download: bool = False) -> bool:
     """
     Main function to install all dependencies.
@@ -484,6 +543,10 @@ def main(force_download: bool = False) -> bool:
         # Install DepotDownloader
         logger.info("Installing DepotDownloader...")
         install_depot_downloader(force=force_download)
+        
+        # Install UE4SS
+        logger.info("Installing UE4SS...")
+        install_ue4ss(force=force_download)
         
         logger.success("All dependencies installed successfully!")
         
