@@ -1,12 +1,11 @@
 import os
 import time
 import shutil
-import psutil
 from pathlib import Path
 from typing import Optional
 from loguru import logger
 from optionsconfig import Options
-from utils import run_process
+from utils import run_process, kill_process_tree, ensure_parent_dir
 
 """
 Mapper extraction process via UE4SS.
@@ -20,27 +19,6 @@ Process:
 * Shutdown the game process
 * Copy generated .usmap from gamedir/DungeonCrawler/Binaries/Win64/Mappings.json to OUTPUT_MAPPER_FILE, renaming it.
 """
-
-def kill_process_tree(parent_pid):
-    """Kill a parent process and all its children."""
-    try:
-        parent = psutil.Process(parent_pid)
-        children = parent.children(recursive=True)
-        
-        for child in children:
-            try:
-                child.kill()
-            except psutil.NoSuchProcess:
-                pass
-            
-        parent.kill()
-    except psutil.NoSuchProcess:
-        pass
-
-def ensure_parent_dir(file_path: str) -> None:
-    """Ensure the parent directory of a file exists."""
-    parent_dir = os.path.dirname(file_path)
-    os.makedirs(parent_dir, exist_ok=True)
 
 def setup_ue4ss(steam_game_dir: str) -> None:
     """Setup UE4SS files in the game directory."""
