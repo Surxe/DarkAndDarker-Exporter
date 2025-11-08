@@ -56,6 +56,7 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 ## Prerequisites
 DepotDownloader, BatchExport, and UE4SS are all downloaded via `dependendency_manager`.
 
+### Unreal Engine 5.3
 [Unreal Engine 5.3](https://www.unrealengine.com/en-US/download) however, needs to be installed before hand. 
 
 Specifically UE5.3 should be installed, not the latest version. This is the version DaD runs on. 
@@ -70,6 +71,9 @@ Include the following in your installation which should total roughly 40gb at th
 * NOT IOS
 * NOT Linux
 * NOT TVOS
+
+### Steam account
+A steam account with Dark and Darker added to its library. The Legendary status is not necessary, so it can be added for free if you previously play on Blacksmith/Epic Games.
 
 ## Installation
 
