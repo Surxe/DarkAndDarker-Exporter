@@ -124,6 +124,23 @@ OPTIONS_SCHEMA = {
         "section": "Repacking",
         "depends_on": ["SHOULD_REPACK", "SHOULD_BATCH_EXPORT"]
     },
+    "SHOULD_GET_MAPPER": {
+        "env": "SHOULD_GET_MAPPER",
+        "arg": "--should-get-mapper",
+        "type": bool,
+        "default": False,
+        "help": "Whether to run the mapper extraction process.",
+        "section": "Mapper",
+    },
+    "FORCE_GET_MAPPER": {
+        "env": "FORCE_GET_MAPPER",
+        "arg": "--force-get-mapper",
+        "type": bool,
+        "default": False,
+        "help": "Re-run the mapper extraction even if mapper file exists.",
+        "section": "Mapper",
+        "depends_on": ["SHOULD_GET_MAPPER"]
+    },
     "SHOULD_BATCH_EXPORT": {
         "env": "SHOULD_BATCH_EXPORT",
         "arg": "--should-batch-export",
