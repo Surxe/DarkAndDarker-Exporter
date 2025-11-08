@@ -126,10 +126,18 @@ def main(options: Optional[Options] = None) -> bool:
             time.sleep(5)
             logger.info(f"Waiting for mappings file to be generated. Time waited: {time_waited:.2f} seconds / {timeout} seconds")
 
-        logger.info("Mappings file located. Waiting 5 more seconds to ensure file is fully written...")
-        time.sleep(5)
+        logger.info("Mappings file located. Waiting for file to be released...")
+        write_timeout = 30  # 30 seconds timeout for write access
+        write_start_time = time.time()
+        while not os.access(mappings_file, os.W_OK):
+            time_waited = time.time() - write_start_time
+            if time_waited > write_timeout:
+                kill_process_tree(game_process.pid)
+                raise TimeoutError(f"Timed out waiting for mappings file to be released after {write_timeout} seconds")
+            time.sleep(3)
+            logger.info(f"File is still locked. Time waited: {time_waited:.2f} seconds / {write_timeout} seconds")
         
-        logger.info("Mappings file generated successfully")
+        logger.info("Mappings file generated successfully and ready for processing")
         
         # Kill the game process
         logger.info("Shutting down game process...")
