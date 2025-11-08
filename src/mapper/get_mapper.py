@@ -2,6 +2,17 @@ from typing import Optional
 from loguru import logger
 from optionsconfig import Options
 
+"""
+Mapper extraction process.
+
+Process:
+* Copy files from ue4ss installation to gamedir/DungeonCrawler/Binaries/Win64
+* Run gamedir/Tavern.exe with args  -server=localhost -steam=1 -taverntype=steam -tavernapp=dad to launch the game locally
+* Wait for Mappings file to exist. Timeout after 120s.
+* Shutdown the game process
+* Copy generated .usmap from gamedir/DungeonCrawler/Binaries/Win64/Mappings.json to OUTPUT_MAPPER_FILE, renaming it.
+"""
+
 def main(options: Optional[Options] = None) -> bool:
     """
     Main function to run the mapper extraction process.
