@@ -13,6 +13,41 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 4. **Get Mapper** - Creates mapper file via UE4SS
 5. **BatchExport** - Extracts game assets as JSON or PNG via CUE4P-BatchExport
 
+Assets are exported "as is", meaning it does not perform any alterations on the source data and therefore will not break when developers make changes to the file structure.
+
+## Table of Contents
+
+- [DarkAndDarker-Exporter](#darkanddarker-exporter)
+  - [Overview](#overview)
+  - [Table of Contents](#table-of-contents)
+  - [Process Details](#process-details)
+    - [1. Dependency Manager](#1-dependency-manager)
+    - [2. Steam Download/Update](#2-steam-downloadupdate)
+    - [3. Repack](#3-repack)
+    - [4. Get Mapper File](#4-get-mapper-file)
+    - [5. BatchExport](#5-batchexport)
+  - [Prerequisites](#prerequisites)
+    - [Windows Operating System](#windows-operating-system)
+    - [Unreal Engine 5.3](#unreal-engine-53)
+    - [Steam account](#steam-account)
+  - [Installation](#installation)
+  - [Options](#options)
+    - [Command Line Argument Usage](#command-line-argument-usage)
+    - [Parameters](#parameters)
+      - [Logging](#logging)
+      - [Dependencies](#dependencies)
+      - [Steam Download](#steam-download)
+      - [Repacking](#repacking)
+      - [Mapper](#mapper)
+      - [Batch Export](#batch-export)
+    - [Miscellaneous Option Behavior](#miscellaneous-option-behavior)
+    - [Common Issues](#common-issues)
+    - [Safety Concerns](#safety-concerns)
+      - [Is it a bannable offense?](#is-it-a-bannable-offense)
+      - [Why is it safe to run?](#why-is-it-safe-to-run)
+  - [Contributing](#contributing)
+    - [Future Ideas](#future-ideas)
+  - [Disclaimer](#disclaimer)
 
 ## Process Details
 
@@ -61,7 +96,7 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 DepotDownloader, BatchExport, and UE4SS are all downloaded via `dependendency_manager`.
 
 ### Windows Operating System
-A Windows Operating System is required specifically for launching Dark and Darker for retrieving the `.usmap` file. For obtaining the mappings headless with linux through wine, see [ynot01/headless-darker](https://github.com/ynot01/headless-darker)
+A Windows Operating System is required specifically for launching Dark and Darker for retrieving the `.usmap` file. For obtaining the mappings headless with linux through wine, see [ynot01/headless-darker](https://github.com/ynot01/headless-darker). For running without Windows, you can get the mapping from another source, then use `SHOULD_GET_MAPPER="False"` and provide the mappings path for the batch export step.
 
 ### Unreal Engine 5.3
 [Unreal Engine 5.3](https://www.unrealengine.com/en-US/download) however, needs to be installed before hand. 
