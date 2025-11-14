@@ -304,15 +304,16 @@ class TestDepotDownloader(unittest.TestCase):
             with patch.object(depot, '_read_downloaded_manifest_id', return_value=None):
                 with patch.object(depot, '_download') as mock_download:
                     with patch.object(depot, '_write_downloaded_manifest_id') as mock_write:
-                        with patch.object(src_run_depot_downloader, 'logger') as mock_logger:
-                            depot.run(None)
-                            
-                            # Verify latest manifest was retrieved
-                            mock_logger.debug.assert_called_with(f"DepotDownloader retrieved latest manifest id of: {latest_manifest_id}")
-                            
-                            # Verify download and write were called with latest manifest
-                            mock_download.assert_called_once_with(latest_manifest_id)
-                            mock_write.assert_called_once_with(latest_manifest_id)
+                        with patch.object(depot, '_remove_steam_api_dll'):
+                            with patch.object(src_run_depot_downloader, 'logger') as mock_logger:
+                                depot.run(None)
+                                
+                                # Verify latest manifest was retrieved
+                                mock_logger.debug.assert_called_with(f"DepotDownloader retrieved latest manifest id of: {latest_manifest_id}")
+                                
+                                # Verify download and write were called with latest manifest
+                                mock_download.assert_called_once_with(latest_manifest_id)
+                                mock_write.assert_called_once_with(latest_manifest_id)
 
     @patch('os.path.exists')
     def test_run_no_previous_manifest(self, mock_exists):

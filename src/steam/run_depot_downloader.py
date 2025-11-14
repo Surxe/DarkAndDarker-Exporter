@@ -1,5 +1,6 @@
 import os
 import shutil
+from pathlib import Path
 from loguru import logger
 from utils import run_process
 from typing import Optional
@@ -39,6 +40,7 @@ class DepotDownloader:
 
         self._download(manifest_id)
         self._write_downloaded_manifest_id(manifest_id)
+        self._remove_steam_api_dll()
 
         return True
 
@@ -102,3 +104,15 @@ class DepotDownloader:
         logger.debug('Writing manifest id', manifest_id, 'to', self.manifest_path)
         with open(self.manifest_path, 'w') as f:
             f.write(manifest_id)
+
+    def _remove_steam_api_dll(self) -> None:
+        try:
+            steam_api_dll_path = Path(self.wrf_dir) / "Engine" / "Binaries" / "ThirdParty" / "Steamworks" / "Steamv153" / "Win64" / "steam_api64.dll"
+            if steam_api_dll_path.exists():
+                steam_api_dll_path.unlink()
+                logger.debug(f'Removed {steam_api_dll_path}')
+            else:
+                logger.debug(f'steam_api64.dll not found at {steam_api_dll_path}, skipping removal')
+                logger.debug('Is the dll named differently for you? If so, we should probably add the file name as an option.')
+        except (FileNotFoundError, OSError) as e:
+            logger.debug(f'Could not remove steam_api64.dll: {e}')
