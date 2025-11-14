@@ -14,7 +14,7 @@ class BatchExporter:
     A class to handle batch exporting of game assets using the CUE4P BatchExport tool.
     
     This class manages the execution of BatchExport.exe with the appropriate options
-    for extracting War Robots Frontiers game data from .pak files to JSON format.
+    for extracting Dark and Darker game data from .pak files to JSON format.
     """
     
     def __init__(self, options: Options, mapping_file_path: str) -> None:

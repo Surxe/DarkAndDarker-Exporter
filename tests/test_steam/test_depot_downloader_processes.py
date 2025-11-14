@@ -26,13 +26,13 @@ class TestDepotDownloaderProcesses(unittest.TestCase):
         """Set up test fixtures before each test method."""
         self.test_dir = tempfile.mkdtemp()
         self.test_path = Path(self.test_dir)
-        self.wrf_dir = str(self.test_path / "wrf_game")
+        self.dad_dir = str(self.test_path / "dad_game")
         self.steam_username = "test_user"
         self.steam_password = "test_password"
         self.force = False
         
-        # Create the wrf_dir
-        Path(self.wrf_dir).mkdir(parents=True, exist_ok=True)
+        # Create the dad_dir
+        Path(self.dad_dir).mkdir(parents=True, exist_ok=True)
 
     def tearDown(self):
         """Clean up after each test method."""
@@ -47,7 +47,7 @@ class TestDepotDownloaderProcesses(unittest.TestCase):
         mock_exists.return_value = True
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=self.force
@@ -73,7 +73,7 @@ class TestDepotDownloaderProcesses(unittest.TestCase):
                 '-username', self.steam_username,
                 '-password', self.steam_password,
                 '-remember-password',
-                '-dir', self.wrf_dir,
+                '-dir', self.dad_dir,
             ]
             
             self.assertEqual(call_args, expected_options)
@@ -91,7 +91,7 @@ class TestDepotDownloaderProcesses(unittest.TestCase):
         mock_exists.return_value = True
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=self.force
@@ -107,7 +107,7 @@ class TestDepotDownloaderProcesses(unittest.TestCase):
         mock_run_process.assert_called_once()
         call_args = mock_run_process.call_args[0][0]
         
-        temp_dir = os.path.join(self.wrf_dir, 'temp')
+        temp_dir = os.path.join(self.dad_dir, 'temp')
         expected_options = [
             os.path.join(depot.depot_downloader_cmd_path),
             '-app', depot.app_id,
@@ -141,7 +141,7 @@ class TestDepotDownloaderProcesses(unittest.TestCase):
         mock_exists.return_value = True
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=self.force
@@ -169,7 +169,7 @@ class TestDepotDownloaderProcesses(unittest.TestCase):
         mock_exists.return_value = True
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=self.force
@@ -184,7 +184,7 @@ class TestDepotDownloaderProcesses(unittest.TestCase):
         self.assertIsNone(result)
         
         # Verify temp directory was still cleaned up
-        temp_dir = os.path.join(self.wrf_dir, 'temp')
+        temp_dir = os.path.join(self.dad_dir, 'temp')
         mock_rmtree.assert_called_once_with(temp_dir)
 
     @patch('os.path.exists')
@@ -196,7 +196,7 @@ class TestDepotDownloaderProcesses(unittest.TestCase):
         mock_exists.return_value = True
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=self.force
@@ -219,7 +219,7 @@ class TestDepotDownloaderProcesses(unittest.TestCase):
         mock_exists.return_value = True
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=self.force
@@ -247,7 +247,7 @@ class TestDepotDownloaderProcesses(unittest.TestCase):
         special_password = "pass!@#$%"
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=special_username,
             steam_password=special_password,
             force=self.force

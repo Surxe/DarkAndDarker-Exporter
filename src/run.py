@@ -77,7 +77,7 @@ def run_dependency_manager(options: Options) -> bool:
 
 def run_steam_download_update(options: Options) -> bool:
     """
-    Run DepotDownloader to download/update the latest War Robots Frontiers game version.
+    Run DepotDownloader to download/update the latest Dark and Darker game version.
     
     Args:
         options (Options): Configuration options
@@ -95,11 +95,11 @@ def run_steam_download_update(options: Options) -> bool:
         
         from steam.run_depot_downloader import DepotDownloader
         
-        logger.info("Running DepotDownloader to download/update War Robots Frontiers...")
+        logger.info("Running DepotDownloader to download/update Dark and Darker...")
         logger.info(f"Target download path: {options.steam_game_download_dir}")
         
         downloader = DepotDownloader(
-            wrf_dir=options.steam_game_download_dir,
+            dad_dir=options.steam_game_download_dir,
             steam_username=options.steam_username,
             steam_password=options.steam_password,
             force=options.force_steam_download,

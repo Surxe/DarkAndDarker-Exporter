@@ -5,12 +5,12 @@ from loguru import logger
 from utils import run_process
 from typing import Optional
 
-APP_ID = '2016590'  # war robots: frontier's app_id
+APP_ID = '2016590'  # dark and darker's app_id
 DEPOT_ID = '2016591'  # the big depot
 
 
 class DepotDownloader:
-    def __init__(self, wrf_dir: str, steam_username: str, steam_password: str, force: bool) -> None:
+    def __init__(self, dad_dir: str, steam_username: str, steam_password: str, force: bool) -> None:
         self.depot_downloader_cmd_path = 'src/steam/DepotDownloader/DepotDownloader.exe'
         if not os.path.exists(self.depot_downloader_cmd_path):
             raise Exception('Is DepotDownloader installed? Run dependency_manager.py')
@@ -22,8 +22,8 @@ class DepotDownloader:
 
         self.steam_username = steam_username
         self.steam_password = steam_password
-        self.wrf_dir = wrf_dir
-        self.manifest_path = os.path.join(self.wrf_dir, 'manifest.txt')
+        self.dad_dir = dad_dir
+        self.manifest_path = os.path.join(self.dad_dir, 'manifest.txt')
         self.force = force
 
     def run(self, manifest_id: Optional[str | None]) -> None:
@@ -55,7 +55,7 @@ class DepotDownloader:
             '-username', self.steam_username,
             '-password', self.steam_password,
             '-remember-password',
-            '-dir', self.wrf_dir,
+            '-dir', self.dad_dir,
         ]
         run_process(subprocess_options, name='download-game-files')
 
@@ -71,7 +71,7 @@ class DepotDownloader:
 
     def _get_latest_manifest_id(self) -> Optional[str]:
         # create temporary folder to store manifest file
-        temp_dir = os.path.join(self.wrf_dir, 'temp')
+        temp_dir = os.path.join(self.dad_dir, 'temp')
 
         subprocess_options = [
             os.path.join(self.depot_downloader_cmd_path),
@@ -107,7 +107,7 @@ class DepotDownloader:
 
     def _remove_steam_api_dll(self) -> None:
         try:
-            steam_api_dll_path = Path(self.wrf_dir) / "Engine" / "Binaries" / "ThirdParty" / "Steamworks" / "Steamv153" / "Win64" / "steam_api64.dll"
+            steam_api_dll_path = Path(self.dad_dir) / "Engine" / "Binaries" / "ThirdParty" / "Steamworks" / "Steamv153" / "Win64" / "steam_api64.dll"
             if steam_api_dll_path.exists():
                 steam_api_dll_path.unlink()
                 logger.debug(f'Removed {steam_api_dll_path}')
