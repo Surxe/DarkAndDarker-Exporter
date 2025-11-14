@@ -22,7 +22,7 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 - Automatically checks versions and updates only when necessary
 
 ### 2. Steam Download/Update  
-- Runs `run_depot_downloader` to download/update the latest War Robots Frontiers game version from Steam
+- Runs `run_depot_downloader` to download/update the latest Dark and Darker game version from Steam
 - Download is saved at `STEAM_GAME_DOWNLOAD_DIR`
 - Supports downloading specific manifest versions or latest version
 - Uses Steam credentials for authentication

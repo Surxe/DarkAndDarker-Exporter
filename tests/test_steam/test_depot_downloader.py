@@ -26,13 +26,13 @@ class TestDepotDownloader(unittest.TestCase):
         """Set up test fixtures before each test method."""
         self.test_dir = tempfile.mkdtemp()
         self.test_path = Path(self.test_dir)
-        self.wrf_dir = str(self.test_path / "wrf_game")
+        self.dad_dir = str(self.test_path / "dad_game")
         self.steam_username = "test_user"
         self.steam_password = "test_password"
         self.force = False
         
-        # Create the wrf_dir
-        Path(self.wrf_dir).mkdir(parents=True, exist_ok=True)
+        # Create the dad_dir
+        Path(self.dad_dir).mkdir(parents=True, exist_ok=True)
         
         # Mock DepotDownloader.exe existence
         self.depot_exe_path = "src/steam/DepotDownloader/DepotDownloader.exe"
@@ -49,19 +49,19 @@ class TestDepotDownloader(unittest.TestCase):
         mock_exists.return_value = True
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=self.force
         )
         
-        self.assertEqual(depot.wrf_dir, self.wrf_dir)
+        self.assertEqual(depot.dad_dir, self.dad_dir)
         self.assertEqual(depot.steam_username, self.steam_username)
         self.assertEqual(depot.steam_password, self.steam_password)
         self.assertEqual(depot.force, self.force)
         self.assertEqual(depot.app_id, '2016590')
         self.assertEqual(depot.depot_id, '2016591')
-        self.assertEqual(depot.manifest_path, os.path.join(self.wrf_dir, 'manifest.txt'))
+        self.assertEqual(depot.manifest_path, os.path.join(self.dad_dir, 'manifest.txt'))
 
     @patch('os.path.exists')
     def test_init_depot_downloader_not_exists(self, mock_exists):
@@ -70,7 +70,7 @@ class TestDepotDownloader(unittest.TestCase):
         
         with self.assertRaises(Exception) as context:
             DepotDownloader(
-                wrf_dir=self.wrf_dir,
+                dad_dir=self.dad_dir,
                 steam_username=self.steam_username,
                 steam_password=self.steam_password,
                 force=self.force
@@ -85,7 +85,7 @@ class TestDepotDownloader(unittest.TestCase):
         
         with self.assertRaises(Exception) as context:
             DepotDownloader(
-                wrf_dir=self.wrf_dir,
+                dad_dir=self.dad_dir,
                 steam_username="",
                 steam_password=self.steam_password,
                 force=self.force
@@ -100,7 +100,7 @@ class TestDepotDownloader(unittest.TestCase):
         
         with self.assertRaises(Exception) as context:
             DepotDownloader(
-                wrf_dir=self.wrf_dir,
+                dad_dir=self.dad_dir,
                 steam_username=self.steam_username,
                 steam_password="",
                 force=self.force
@@ -115,7 +115,7 @@ class TestDepotDownloader(unittest.TestCase):
         
         with self.assertRaises(Exception) as context:
             DepotDownloader(
-                wrf_dir=self.wrf_dir,
+                dad_dir=self.dad_dir,
                 steam_username=None,
                 steam_password=None,
                 force=self.force
@@ -129,14 +129,14 @@ class TestDepotDownloader(unittest.TestCase):
         mock_exists.side_effect = lambda path: path == self.depot_exe_path or path.endswith('manifest.txt')
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=self.force
         )
         
         manifest_content = "123456789"
-        manifest_path = Path(self.wrf_dir) / "manifest.txt"
+        manifest_path = Path(self.dad_dir) / "manifest.txt"
         manifest_path.write_text(manifest_content)
         
         # Mock os.path.exists for the manifest file specifically
@@ -153,7 +153,7 @@ class TestDepotDownloader(unittest.TestCase):
         mock_exists.side_effect = lambda path: path == self.depot_exe_path
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=self.force
@@ -169,7 +169,7 @@ class TestDepotDownloader(unittest.TestCase):
         mock_exists.side_effect = lambda path: path == self.depot_exe_path or path.endswith('manifest.txt')
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=self.force
@@ -190,7 +190,7 @@ class TestDepotDownloader(unittest.TestCase):
         mock_exists.return_value = True
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=self.force
@@ -218,7 +218,7 @@ class TestDepotDownloader(unittest.TestCase):
         mock_exists.return_value = True
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=False
@@ -245,7 +245,7 @@ class TestDepotDownloader(unittest.TestCase):
         mock_exists.return_value = True
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=True
@@ -268,7 +268,7 @@ class TestDepotDownloader(unittest.TestCase):
         mock_exists.return_value = True
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=False
@@ -292,7 +292,7 @@ class TestDepotDownloader(unittest.TestCase):
         mock_exists.return_value = True
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=False
@@ -321,7 +321,7 @@ class TestDepotDownloader(unittest.TestCase):
         mock_exists.return_value = True
         
         depot = DepotDownloader(
-            wrf_dir=self.wrf_dir,
+            dad_dir=self.dad_dir,
             steam_username=self.steam_username,
             steam_password=self.steam_password,
             force=False
