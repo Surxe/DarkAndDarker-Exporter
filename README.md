@@ -11,21 +11,24 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 2. **Steam Download/Update** - Downloads/updates game files via DepotDownloader
 3. **Repack** - Repacks to avoid duplicate paks with differing data
 4. **Get Mapper** - Creates mapper file via UE4SS
-5. **BatchExport** - Extracts game assets as JSON or PNG
+5. **BatchExport** - Extracts game assets as JSON or PNG via CUE4P-BatchExport
 
 
 ## Process Details
 
 ### 1. Dependency Manager
 - Runs `dependency_manager.py` to download latest release of all dependencies if outdated/missing
-- Downloads BatchExport and DepotDownloader tools from their respective GitHub releases
-- Automatically checks versions and updates only when necessary
+- Downloads [CUE4P-BatchExport](https://github.com/Surxe/CUE4P-BatchExport), [DepotDownloader](https://github.com/SteamRE/DepotDownloader), and [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS) tools from their respective GitHub releases
+- Automatically checks versions and updates only when the version changes
 
 ### 2. Steam Download/Update  
 - Runs `run_depot_downloader` to download/update the latest Dark and Darker game version from Steam
+  - It is not recommended to pass your existing DaD installation
 - Download is saved at `STEAM_GAME_DOWNLOAD_DIR`
 - Supports downloading specific manifest versions or latest version
 - Uses Steam credentials for authentication
+  - It is recommended to create a separate steam account
+  - You may find it easiest to disable SteamGuard 2FA, but this is only recommended in combination with using a separate steam account
 - Manifest id (if downloaded latest via `MANIFEST_ID`=`(blank)`) is saved to `STEAM_GAME_DOWNLOAD_DIR`/manifest.txt
 - Steam API DLL is removed from the installation at `Engine\Binaries\ThirdParty\Steamworks\Steamv153\Win64\steam_api64.dll` so that it does not interact with a steam installation
 
@@ -40,7 +43,7 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 ### 4. Get Mapper File
 - Copies UE4SS files to game's DungeonCrawler/Binaries/Win64 directory
 - Sets up UE4SS AutoUSMAP mod in the Mods directory
-- Launches game in local mode with required parameters
+- Launches game with required arguments and `server=localhost` so that it does connect to DaD servers
 - Waits for UE4SS to hook into the process and generate mapping file
 - Monitors file generation with 120-second timeout
 - Checks file write access every 3 seconds with 30-second timeout
@@ -56,6 +59,9 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 
 ## Prerequisites
 DepotDownloader, BatchExport, and UE4SS are all downloaded via `dependendency_manager`.
+
+### Windows Operating System
+A Windows Operating System is required specifically for launching Dark and Darker for retrieving the `.usmap` file. For obtaining the mappings headless with linux through wine, see [ynot01/headless-darker](https://github.com/ynot01/headless-darker)
 
 ### Unreal Engine 5.3
 [Unreal Engine 5.3](https://www.unrealengine.com/en-US/download) however, needs to be installed before hand. 
@@ -74,7 +80,7 @@ Include the following in your installation which should total roughly 40gb at th
 * NOT TVOS
 
 ### Steam account
-A steam account with Dark and Darker added to its library. The Legendary status is not necessary, so it can be added for free if you previously play on Blacksmith/Epic Games.
+A steam account with Dark and Darker added to its library. The Legendary status is not necessary, so it can be added for free if you otherwise play on Blacksmith/Epic Games.
 
 ## Installation
 
@@ -250,6 +256,15 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
    - Use forward slashes (/) in paths for compatibility
    - Ensure parent directories exist for output paths
 
+### Safety Concerns
+#### Is it a bannable offense?
+If used for malicious purposes, yes
+
+#### Why is it safe to run?
+* Dark and Darker is launched with `server=localhost` so it does not connect to their servers
+* Steam API DLL is removed, so launching DaD does not connect to Steamworks
+* An alternate steam account is still recommended, particularly for logging in to the account to download the game without needing to satisfy SteamGuard notifications
+* If recommendations are not met or usage of this tool is modified, these safety nets may cease to apply
 
 ## Contributing
 
