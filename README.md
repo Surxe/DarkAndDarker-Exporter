@@ -61,7 +61,7 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 DepotDownloader, BatchExport, and UE4SS are all downloaded via `dependendency_manager`.
 
 ### Windows Operating System
-A Windows Operating System is required specifically for launching Dark and Darker for retrieving the `.usmap` file. For obtaining the mappings headless with linux through wine, see [ynot01/headless-darker](https://github.com/ynot01/headless-darker)
+A Windows Operating System is required specifically for launching Dark and Darker for retrieving the `.usmap` file. For obtaining the mappings headless with linux through wine, see [ynot01/headless-darker](https://github.com/ynot01/headless-darker). For running without Windows, you can get the mapping from another source, then use `SHOULD_GET_MAPPER="False"` and provide the mappings path for the batch export step.
 
 ### Unreal Engine 5.3
 [Unreal Engine 5.3](https://www.unrealengine.com/en-US/download) however, needs to be installed before hand. 
