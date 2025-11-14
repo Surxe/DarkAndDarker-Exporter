@@ -112,3 +112,4 @@ class DepotDownloader:
             logger.debug(f'Removed {steam_api_dll_path}')
         else:
             logger.debug(f'steam_api64.dll not found at {steam_api_dll_path}, skipping removal')
+            logger.debug('Is the dll named differently for you? If so, we should probably add the file name as an option.')

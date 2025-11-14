@@ -27,6 +27,7 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 - Supports downloading specific manifest versions or latest version
 - Uses Steam credentials for authentication
 - Manifest id (if downloaded latest via `MANIFEST_ID`=`(blank)`) is saved to `STEAM_GAME_DOWNLOAD_DIR`/manifest.txt
+- Steam API DLL is removed from the installation at `Engine\Binaries\ThirdParty\Steamworks\Steamv153\Win64\steam_api64.dll` so that it does not interact with a steam installation
 
 ### 3. Repack
 - Uses UnrealPak.exe from local Unreal Engine 5.3 installation
