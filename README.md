@@ -13,6 +13,7 @@ DarkAndDarker-Exporter orchestrates a complete 4-step process the extract and co
 4. **Get Mapper** - Creates mapper file via UE4SS
 5. **BatchExport** - Extracts game assets as JSON or PNG via CUE4P-BatchExport
 
+Assets are exported "as is", meaning it does not perform any alterations on the source data and therefore will not break when developers make changes to the file structure.
 
 ## Process Details
 
