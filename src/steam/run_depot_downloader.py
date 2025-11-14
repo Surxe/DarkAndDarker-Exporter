@@ -106,10 +106,13 @@ class DepotDownloader:
             f.write(manifest_id)
 
     def _remove_steam_api_dll(self) -> None:
-        steam_api_dll_path = os.path.join(self.wrf_dir, Path('Engine\Binaries\ThirdParty\Steamworks\Steamv153\Win64'), 'steam_api64.dll')
-        if os.path.exists(steam_api_dll_path):
-            os.remove(steam_api_dll_path)
-            logger.debug(f'Removed {steam_api_dll_path}')
-        else:
-            logger.debug(f'steam_api64.dll not found at {steam_api_dll_path}, skipping removal')
-            logger.debug('Is the dll named differently for you? If so, we should probably add the file name as an option.')
+        try:
+            steam_api_dll_path = Path(self.wrf_dir) / "Engine" / "Binaries" / "ThirdParty" / "Steamworks" / "Steamv153" / "Win64" / "steam_api64.dll"
+            if steam_api_dll_path.exists():
+                steam_api_dll_path.unlink()
+                logger.debug(f'Removed {steam_api_dll_path}')
+            else:
+                logger.debug(f'steam_api64.dll not found at {steam_api_dll_path}, skipping removal')
+                logger.debug('Is the dll named differently for you? If so, we should probably add the file name as an option.')
+        except (FileNotFoundError, OSError) as e:
+            logger.debug(f'Could not remove steam_api64.dll: {e}')
