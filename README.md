@@ -28,7 +28,7 @@ Assets are exported "as is", meaning it does not perform any alterations on the 
     - [5. BatchExport](#5-batchexport)
   - [Prerequisites](#prerequisites)
     - [Windows Operating System](#windows-operating-system)
-    - [Unreal Engine 5.3](#unreal-engine-53)
+    - [Unreal Engine 5.5](#unreal-engine-55)
     - [Steam account](#steam-account)
   - [Installation](#installation)
   - [Options](#options)
@@ -68,7 +68,7 @@ Assets are exported "as is", meaning it does not perform any alterations on the 
 - Steam API DLL is removed from the installation at `Engine\Binaries\ThirdParty\Steamworks\Steamv153\Win64\steam_api64.dll` so that it does not interact with a steam installation
 
 ### 3. Repack
-- Uses UnrealPak.exe from local Unreal Engine 5.3 installation
+- Uses UnrealPak.exe from local Unreal Engine 5.5 installation
 - Extracts all .pak files from game directory using Crypto.json keys
 - Extracts to a temporary "PakExtract" directory with -extracttomountpoint flag
 - Repacks all content into a single .pak file with Oodle compression
@@ -98,10 +98,10 @@ DepotDownloader, BatchExport, and UE4SS are all downloaded via `dependendency_ma
 ### Windows Operating System
 A Windows Operating System is required specifically for launching Dark and Darker for retrieving the `.usmap` file. For obtaining the mappings headless with linux through wine, see [ynot01/headless-darker](https://github.com/ynot01/headless-darker). For running without Windows, you can get the mapping from another source, then use `SHOULD_GET_MAPPER="False"` and provide the mappings path for the batch export step.
 
-### Unreal Engine 5.3
-[Unreal Engine 5.3](https://www.unrealengine.com/en-US/download) however, needs to be installed before hand. 
+### Unreal Engine 5.5
+[Unreal Engine 5.5](https://www.unrealengine.com/en-US/download) however, needs to be installed before hand. 
 
-Specifically UE5.3 should be installed, not the latest version. This is the version DaD runs on. 
+Specifically UE5.5 should be installed, not the latest version. This is the version DaD runs on. 
 
 Include the following in your installation which should total roughly 40gb at the time of writing:
 * Core Components
@@ -160,14 +160,14 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
 <!-- BEGIN_GENERATED_OPTIONS -->
 #### Logging
 
-- **LOG_LEVEL** - Logging level. Must be one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.
+* **LOG_LEVEL** - Logging level. Must be one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.
   - Default: `"DEBUG"`
   - Command line: `--log-level`
 
 
 #### Dependencies
 
-- **SHOULD_DOWNLOAD_DEPENDENCIES** - Whether to download dependencies.
+* **SHOULD_DOWNLOAD_DEPENDENCIES** - Whether to download dependencies.
   - Default: `"false"`
   - Command line: `--should-download-dependencies`
 
@@ -179,7 +179,7 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
 
 #### Steam Download
 
-- **SHOULD_DOWNLOAD_STEAM_GAME** - Whether to download Steam game files.
+* **SHOULD_DOWNLOAD_STEAM_GAME** - Whether to download Steam game files.
   - Default: `"false"`
   - Command line: `--should-download-steam-game`
 
@@ -192,7 +192,7 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
   - Default: `""` (empty)
   - Command line: `--manifest-id`
   - Depends on: `SHOULD_DOWNLOAD_STEAM_GAME`
-  - See [SteamDB](https://steamdb.info/app/1491000/depot/1491005/manifests/) for available values
+  - [SteamDB](https://steamdb.info/app/1491000/depot/1491005/manifests/)
 
 * **STEAM_USERNAME** - Steam username for authentication.
   - Default: None - required when SHOULD_DOWNLOAD_STEAM_GAME is True
@@ -213,7 +213,7 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
 
 #### Repacking
 
-- **SHOULD_REPACK** - Whether to repack the game files into a single archive.
+* **SHOULD_REPACK** - Whether to repack the game files into a single archive.
   - Default: `"false"`
   - Command line: `--should-repack`
 
@@ -222,7 +222,8 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
   - Command line: `--force-repack`
   - Depends on: `SHOULD_REPACK`
 
-* **UE_INSTALL_DIR** - Path to the Unreal Engine 5.3 installation directory.
+* **UE_INSTALL_DIR** - Path to the Unreal Engine 5.5 installation directory.
+  - Example: `"C:/Program Files/Epic Games/UE_5.5"`
   - Default: None - required when SHOULD_REPACK is True
   - Command line: `--ue-install-dir`
   - Depends on: `SHOULD_REPACK`
@@ -235,7 +236,7 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
 
 #### Mapper
 
-- **SHOULD_GET_MAPPER** - Whether to run the mapper extraction process.
+* **SHOULD_GET_MAPPER** - Whether to run the mapper extraction process.
   - Default: `"false"`
   - Command line: `--should-get-mapper`
 
@@ -252,7 +253,7 @@ Copy `.env.example` to `.env` and configure the following parameters, unless the
 
 #### Batch Export
 
-- **SHOULD_BATCH_EXPORT** - Whether to run the BatchExport tool to export assets.
+* **SHOULD_BATCH_EXPORT** - Whether to run the BatchExport tool to export assets.
   - Default: `"false"`
   - Command line: `--should-batch-export`
 
@@ -308,7 +309,7 @@ If used for malicious purposes, yes
 
 ### Future Ideas
 * Linux or wine support (DaD struggles to launch headless with wine)
-* Unreal Engine 5.3 installation added to `dependency_manager`
+* Unreal Engine 5.5 installation added to `dependency_manager`
   * Is an Epic Games Launcher install also required?
   * Is an EGL account required?
   * Does rerunning the install to the same dir perform a repair that doesn't take as long as a clean install?

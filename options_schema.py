@@ -111,8 +111,8 @@ OPTIONS_SCHEMA = {
         "arg": "--ue-install-dir",
         "type": Path,
         "default": None,
-        #"example": "C:\Program Files\Epic Games\UE_5.3",
-        "help": "Path to the Unreal Engine 5.3 installation directory.",
+        "example": Path("C:\\Program Files\\Epic Games\\UE_5.5"),
+        "help": "Path to the Unreal Engine 5.5 installation directory.",
         "section": "Repacking",
         "depends_on": ["SHOULD_REPACK"]
     },
