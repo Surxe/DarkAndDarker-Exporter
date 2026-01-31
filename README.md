@@ -101,7 +101,7 @@ A Windows Operating System is required specifically for launching Dark and Darke
 ### Unreal Engine 5.5
 [Unreal Engine 5.5](https://www.unrealengine.com/en-US/download) however, needs to be installed before hand. 
 
-Specifically UE5.5 should be installed, not the latest version. This is the version DaD runs on. 
+Specifically UE5.5 should be installed, not the latest version. This is the version DaD runs on. If an older version is installed, it will not work.
 
 Include the following in your installation which should total roughly 40gb at the time of writing:
 * Core Components
